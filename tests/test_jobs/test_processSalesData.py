@@ -17,13 +17,13 @@ def setup_sparksession(spark_context):
     return spark_context
 
 
-def test_readData():
-    print("test_readData Called")
-    csvfile = "hdfs://localhost:8020/sales/data/test_data.csv"
-    processData = ProceeSalesData()
-    csvdata = processData.readData(csvfile)
-    count = csvdata.count()
-    assert count == 18
+# def test_readData():
+#     print("test_readData Called")
+#     csvfile = "hdfs://localhost:8020/sales/data/test_data.csv"
+#     processData = ProceeSalesData()
+#     csvdata = processData.readData(csvfile)
+#     count = csvdata.count()
+#     assert count == 18
 
 
 #def test_readdata_fail():
@@ -34,23 +34,23 @@ def test_readData():
 #    count = csvdata.count()
 #    assert count == 1
 
-def test_exception_transformation_readData_withWrongTableName():
-    print("test_readData Called")
-    with pytest.raises(Exception) as excinfo:
-        wrongTableName = "xyz"
-        transformData = TransformSalesData()
-        csvdata = transformData.readData(wrongTableName)
-        assert str(excinfo.value) == 'testRaghu'
+# def test_exception_transformation_readData_withWrongTableName():
+#     print("test_readData Called")
+#     with pytest.raises(Exception) as excinfo:
+#         wrongTableName = "xyz"
+#         transformData = TransformSalesData()
+#         csvdata = transformData.readData(wrongTableName)
+#         assert str(excinfo.value) == 'testRaghu'
 
 
-def test_readdata_with_fixture(setup):
-    print("test_readdata_with_fixture Called")
-    csvfile = "hdfs://localhost:8020/sales/data/test_data.csv"
-    expected_count = setup.count()
-    processData = ProceeSalesData()
-    csvdata = processData.readData(csvfile)
-    count = csvdata.count()
-    assert count == expected_count
+# def test_readdata_with_fixture(setup):
+#     print("test_readdata_with_fixture Called")
+#     csvfile = "hdfs://localhost:8020/sales/data/test_data.csv"
+#     expected_count = setup.count()
+#     processData = ProceeSalesData()
+#     csvdata = processData.readData(csvfile)
+#     count = csvdata.count()
+#     assert count == expected_count
 
 
 def test_storedata(setup,setup_sparksession):
