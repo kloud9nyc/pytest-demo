@@ -9,5 +9,5 @@ build-prod:
 	rm -rf dist-prod
 	mkdir ./dist-prod
 	cp ./src/jobs/processSalesData.py ./dist-prod
-	zip -x /src/jobs/transformSalesDataFromRawToClean.py -x /src/reading/salesTranscationReader.py -x /src/writing/salesTranscationWriter.py dist-prod/jobs.zip .
+	zip -x /src/jobs/transformSalesDataFromRawToClean.py  /src/reading/salesTranscationReader.py /src/writing/salesTranscationWriter.py dist-prod/jobs.zip .
 	
