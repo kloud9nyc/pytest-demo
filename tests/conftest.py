@@ -41,6 +41,6 @@ def input_dataframe_data(spark_context):
     :param spark_context:
     :return:
     """
-    input_mock_data = spark_context.read.csv("file:///Users/raghunathan.bakkianathan/work/test_data.csv",
+    input_mock_data = spark_context.read.csv("hdfs://localhost:8020/sales/data/test_data.csv",
                                             inferSchema=True, header=True)
     return input_mock_data

@@ -19,7 +19,7 @@ def setup_sparksession(spark_context):
 
 def test_readData():
     print("test_readData Called")
-    csvfile = "file:///Users/raghunathan.bakkianathan/Work/test_data.csv"
+    csvfile = "hdfs://localhost:8020/sales/data/test_data.csv"
     processData = ProceeSalesData()
     csvdata = processData.readData(csvfile)
     count = csvdata.count()
@@ -45,7 +45,7 @@ def test_exception_transformation_readData_withWrongTableName():
 
 def test_readdata_with_fixture(setup):
     print("test_readdata_with_fixture Called")
-    csvfile = "file:///Users/raghunathan.bakkianathan/Work/test_data.csv"
+    csvfile = "hdfs://localhost:8020/sales/data/test_data.csv"
     expected_count = setup.count()
     processData = ProceeSalesData()
     csvdata = processData.readData(csvfile)
@@ -80,7 +80,7 @@ def test_exception_storedata(setup,setup_sparksession):
 def test_exception_readData():
     print("test_readData Called")
     with pytest.raises(Exception) as excinfo:
-        csvfile = "file:///Users/raghunathan.bakkianathan/Work/test_data123.csv"
+        csvfile = "hdfs://localhost:8020/sales/data/test_data.csv"
         processData = ProceeSalesData()
         csvdata = processData.readData(csvfile)
         assert str(excinfo.value) == 'testRaghu'

@@ -28,7 +28,7 @@ class ProceeSalesData(salesTranscationReader.SalesTranscationReader,salesTransca
 
 
 
-csvFile = "file:///Users/raghunathan.bakkianathan/Downloads/best-practice/src/data/sales.csv"
+csvFile = " hdfs://localhost:8020/sales/data/sales.csv"
 processData = ProceeSalesData()
 csvdata = processData.readData(csvFile)
 rawTable = "raw_sales_db.raw_sales_transcation"
