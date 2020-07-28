@@ -1,0 +1,13 @@
+.idea/
+htmlcov/
+src/.DS_Store
+src/.scannerwork/
+src/context/__pycache__/
+src/jobs/__pycache__/
+src/reading/__pycache__/
+src/transformation/__pycache__/
+src/utilities/__pycache__/
+src/writing/__pycache__/
+tests/__pycache__/
+tests/test_jobs/__pycache__/
+
