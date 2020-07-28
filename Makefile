@@ -9,4 +9,5 @@ build-prod:
 	rm -rf dist-prod
 	mkdir ./dist-prod
 	cp ./src/jobs/processSalesData.py ./dist-prod
-	zip -x /Users/raghunathan.bakkianathan/Work/DataEngg/venv/lib/python3.7/site-packages/ -r dist-prod/jobs.zip .
+	zip -x /src/jobs/transformSalesDataFromRawToClean.py -x /src/reading/salesTranscationReader.py -x /src/writing/salesTranscationWriter.py dist-prod/jobs.zip .
+	
