@@ -28,13 +28,12 @@ class ProceeSalesData(salesTranscationReader.SalesTranscationReader,salesTransca
       print("Error while storing the data : ", e.__class__, "occurred.")
 
 
-config = configparser.RawConfigParser()
-config.read('../properties/config.properties')
-columns_list = config.get("General", "readcsvFilePath")
-#csvFile = " hdfs://localhost:8020/sales/data/sales.csv"
-csvFile = config.get("General", "readCSVFilePath")
-processData = ProceeSalesData()
-csvdata = processData.readData(csvFile)
-rawTable = config.get("General", "rawSalesDB") + "."+ config.get("General", "rawSalesTable")
-processData.storeData(csvdata,rawTable)
+if __name__ == "__main__":
+  config = configparser.RawConfigParser()
+  config.read('../properties/config.properties')
+  csvFile = config.get("General", "readCSVFilePath")
+  processData = ProceeSalesData()
+  csvdata = processData.readData(csvFile)
+  rawTable = config.get("General", "rawSalesDB") + "." + config.get("General", "rawSalesTable")
+  processData.storeData(csvdata,rawTable)
 

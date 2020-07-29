@@ -37,11 +37,12 @@ class TransformSalesData(salesTranscationReader.SalesTranscationReader,salesTran
     except Exception as e:
       print("Error while storing the clean data : ", e.__class__, "occurred.")
 
-config = configparser.RawConfigParser()
-config.read('../properties/config.properties')
-rawTablename = config.get("General", "rawSalesDB") + "."+ config.get("General", "rawSalesTable")
-transformData = TransformSalesData()
-data = transformData.readData(rawTablename)
-cleanData = transformData.doTransformation(data)
-cleanTable = config.get("General", "cleanSalesDB") + "."+ config.get("General", "cleanSalesTable")
-transformData.storeData(cleanData,cleanTable)
+if __name__ == "__main__":
+  config = configparser.RawConfigParser()
+  config.read('../properties/config.properties')
+  rawTablename = config.get("General", "rawSalesDB") + "." + config.get("General", "rawSalesTable")
+  transformData = TransformSalesData()
+  data = transformData.readData(rawTablename)
+  cleanData = transformData.doTransformation(data)
+  cleanTable = config.get("General", "cleanSalesDB") + "." + config.get("General", "cleanSalesTable")
+  transformData.storeData(cleanData,cleanTable)

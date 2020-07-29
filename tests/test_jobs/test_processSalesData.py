@@ -21,15 +21,17 @@ def setup_readConfig(readConfig):
     return readConfig
 
 @pytest.fixture(scope="function")
-def setup_createTestRawTable(createTestRawTable):
+def setup_createTestRawTable(createTestRawTable,spark_context,request):
     return createTestRawTable
+    def teardown_droptable(spark_context):
+        print("hello")
+        spark_context.sql(""" DROP TABLE IF EXISTS raw_sales_db.raw_sales_transcation_test """)
 
+    request.addfinalizer(teardown_droptable)
 
-def test_readData(setup_readConfig):
+def test_readData(readConfig):
     print("test_readData Called")
-    csvfile = setup_readConfig.get("TestingEnv","testreadCSVFilePath") #"hdfs://localhost:8020/sales/data/test_data.csv"
-    processData = ProceeSalesData()
-    csvdata = processData.readData(csvfile)
+    csvdata = ProceeSalesData().readData(readConfig)
     count = csvdata.count()
     assert count == 18
 
@@ -42,7 +44,7 @@ def test_exception_transformation_readData_withWrongTableName():
 
 
 def test_readdata_with_fixture(setup,setup_readConfig):
-    csvfile = setup_readConfig.get("TestingEnv","testreadCSVFilePath")
+    csvfile = setup_readConfig
     expected_count = setup.count()
     processData = ProceeSalesData()
     csvdata = processData.readData(csvfile)
@@ -74,18 +76,16 @@ def test_exception_storedata(setup,setup_sparksession):
 
 def test_exception_readData(setup_readConfig):
     with pytest.raises(Exception) as excinfo:
-        csvfile = setup_readConfig.get("TestingEnv","testreadCSVFilePath") #"hdfs://localhost:8020/sales/data/test_data.csv"
+        csvfile = setup_readConfig
         processData = ProceeSalesData()
         csvdata = processData.readData(csvfile)
         assert str(excinfo.value) == 'testRaghu'
 
 def test_doTransformation(setup):
     print("test_doTransformation Called")
-
     transformData = TransformSalesData()
     cleanData = transformData.doTransformation(setup)
     actual_result = cleanData.count()
-
     setup = setup.withColumn("UniqueKey",sf.concat(sf.col('invoiceno'),sf.lit('_'), sf.col('customerid')))
     setup = setup.distinct()
     expected_count = setup.count()

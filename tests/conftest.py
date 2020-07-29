@@ -12,11 +12,10 @@ def quiet_py4j():
     logger = logging.getLogger('py4j')
     logger.setLevel(logging.ERROR)
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="session")
 def readConfig():
-    config = configparser.RawConfigParser()
-    config.read('../src/properties/config.properties')
-    return config
+    configCsvPath = "file:///Users/raghunathan.bakkianathan/demo/pytest-demo/src/data/sales.csv"
+    return configCsvPath
 
 @pytest.fixture(scope="session")
 def spark_context(request):
@@ -47,11 +46,8 @@ def input_dataframe_data(spark_context,readConfig):
     :param spark_context:
     :return:
     """
-    config = configparser.RawConfigParser()
-    config.read('../src/properties/config.properties')
-
     #input_mock_data = spark_context.read.csv("hdfs://localhost:8020/sales/data/test_data.csv",inferSchema=True, header=True)
-    input_mock_data = spark_context.read.csv(readConfig.get("TestingEnv","testreadCSVFilePath"), inferSchema=True,header=True)
+    input_mock_data = spark_context.read.csv(readConfig, inferSchema=True,header=True)
     return input_mock_data
 
 @pytest.fixture(scope="function")
