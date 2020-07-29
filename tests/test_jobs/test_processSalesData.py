@@ -16,26 +16,24 @@ def setup(input_dataframe_data):
 def setup_sparksession(spark_context):
     return spark_context
 
+@pytest.fixture(scope="function")
+def setup_readConfig(readConfig):
+    return readConfig
 
-def test_readData():
+@pytest.fixture(scope="function")
+def setup_createTestRawTable(createTestRawTable):
+    return createTestRawTable
+
+
+def test_readData(setup_readConfig):
     print("test_readData Called")
-    csvfile = "hdfs://localhost:8020/sales/data/test_data.csv"
+    csvfile = setup_readConfig.get("TestingEnv","testreadCSVFilePath") #"hdfs://localhost:8020/sales/data/test_data.csv"
     processData = ProceeSalesData()
     csvdata = processData.readData(csvfile)
     count = csvdata.count()
     assert count == 18
 
-
-#def test_readdata_fail():
-#    print("test_readdata_fail Called")
-#    csvfile = "file:///Users/raghunathan.bakkianathan/Work/test_data.csv"
-#    processData = ProceeSalesData()
-#    csvdata = processData.readData(csvfile)
-#    count = csvdata.count()
-#    assert count == 1
-
 def test_exception_transformation_readData_withWrongTableName():
-    print("test_readData Called")
     with pytest.raises(Exception) as excinfo:
         wrongTableName = "xyz"
         transformData = TransformSalesData()
@@ -43,9 +41,8 @@ def test_exception_transformation_readData_withWrongTableName():
         assert str(excinfo.value) == 'testRaghu'
 
 
-def test_readdata_with_fixture(setup):
-    print("test_readdata_with_fixture Called")
-    csvfile = "hdfs://localhost:8020/sales/data/test_data.csv"
+def test_readdata_with_fixture(setup,setup_readConfig):
+    csvfile = setup_readConfig.get("TestingEnv","testreadCSVFilePath")
     expected_count = setup.count()
     processData = ProceeSalesData()
     csvdata = processData.readData(csvfile)
@@ -53,8 +50,7 @@ def test_readdata_with_fixture(setup):
     assert count == expected_count
 
 
-def test_storedata(setup,setup_sparksession):
-    print("test_storedata Called")
+def test_storedata(setup,setup_sparksession,setup_createTestRawTable):
     testdata = setup
     processData = ProceeSalesData()
     tablename= "raw_sales_db.raw_sales_transcation_test"
@@ -67,7 +63,6 @@ def test_storedata(setup,setup_sparksession):
     assert finalcount == testdata.count()
 
 def test_exception_storedata(setup,setup_sparksession):
-    print("test_storedata Called")
     testdata = setup
     processData = ProceeSalesData()
 
@@ -77,15 +72,12 @@ def test_exception_storedata(setup,setup_sparksession):
         processData.storeData(testdata,tablename)
         assert str(excinfo.value) == 'testRaghu'
 
-def test_exception_readData():
-    print("test_readData Called")
+def test_exception_readData(setup_readConfig):
     with pytest.raises(Exception) as excinfo:
-        csvfile = "hdfs://localhost:8020/sales/data/test_data.csv"
+        csvfile = setup_readConfig.get("TestingEnv","testreadCSVFilePath") #"hdfs://localhost:8020/sales/data/test_data.csv"
         processData = ProceeSalesData()
         csvdata = processData.readData(csvfile)
         assert str(excinfo.value) == 'testRaghu'
-
-
 
 def test_doTransformation(setup):
     print("test_doTransformation Called")

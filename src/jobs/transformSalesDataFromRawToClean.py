@@ -3,18 +3,18 @@ from src.reading import salesTranscationReader
 from src.writing import salesTranscationWriter
 from src.transformation import salesTranscationTransformation
 from src.context import sparkcontext
-rawTablename = "raw_sales_db.raw_sales_transcation"
+import configparser
 
 class TransformSalesData(salesTranscationReader.SalesTranscationReader,salesTranscationWriter.SalesTranscationWriter):
 
   def __init__(self):
-    print("Inside the constructor of Class proceeSalesData ")
+    print("Inside the constructor of Class TransformSalesData ")
 
 
   #This is the function is to read the csv data,
   def readData(self,rawTablename):
     try:
-      print("Inside the readData of salesTranscationReader ")
+      print("Inside the readData of TransformSalesData ")
       hiveData = salesTranscationReader.SalesTranscationReader().readSalesDataFromHive(rawTablename)
       return hiveData
     except Exception as e:
@@ -30,17 +30,18 @@ class TransformSalesData(salesTranscationReader.SalesTranscationReader,salesTran
       print("Error while doing the transormation : ", e.__class__, "occurred.")
 
   # This is the function is to store the clean data to hive,
-  def storeData(self,data):
+  def storeData(self,data,cleanTable):
     try:
-      cleanTable = "raw_sales_db.clean_sales_transcation"
       status = salesTranscationWriter.SalesTranscationWriter().writeSalesData(data,cleanTable)
       return status
     except Exception as e:
       print("Error while storing the clean data : ", e.__class__, "occurred.")
 
-
-
+config = configparser.RawConfigParser()
+config.read('../properties/config.properties')
+rawTablename = config.get("General", "rawSalesDB") + "."+ config.get("General", "rawSalesTable")
 transformData = TransformSalesData()
 data = transformData.readData(rawTablename)
 cleanData = transformData.doTransformation(data)
-transformData.storeData(cleanData)
+cleanTable = config.get("General", "cleanSalesDB") + "."+ config.get("General", "cleanSalesTable")
+transformData.storeData(cleanData,cleanTable)
