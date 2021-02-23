@@ -7,4 +7,4 @@ sonar-scanner \
   -Dsonar.projectKey=SalesTransactions \
   -Dsonar.sources=. \
   -Dsonar.host.url=http://localhost:9000 \
-  -Dsonar.login=43a67d849bc2b7798c4454261b437482b41d4902
+  -Dsonar.login=c203d789a28b4f201ebbe09ccfa8d6b0f7fabde9
